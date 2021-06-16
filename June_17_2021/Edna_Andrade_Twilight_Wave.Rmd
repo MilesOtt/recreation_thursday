@@ -1,0 +1,157 @@
+---
+title: "Edna Andrade's Twilight Wave (1973)"
+author: "Miles Ott"
+date: "6/15/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggforce)
+```
+
+
+```{r}
+g<-ggplot()+ theme(panel.background = element_rect(fill='#e8eadf', colour='white'),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())
+
+
+circle.pos<-data.frame(
+  x<-sin(seq(0, 2*pi, length=100))*1/19,
+  y<-cos(seq(0, 2*pi, length=100))*1/19
+)
+
+
+positions1<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-4*pi,2*pi, length.out = 100))*.08, 1)-.8
+  )
+positions2<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-4.5*pi,1.5*pi, length.out = 100))*.08, 1)-.65
+  )
+positions3<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-5*pi,1*pi, length.out = 100))*.08, 1)-.50
+  )
+positions4<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-5.5*pi,.5*pi, length.out = 100))*.08, 1)-.35
+  )
+positions5<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-6*pi,0*pi, length.out = 100))*.08, 1)-.2
+  )
+positions6<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-6.5*pi,-.5*pi, length.out = 100))*.08, 1)-.05
+  )
+positions7<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.5,sin(seq(-7*pi,-1*pi, length.out = 100))*.08, .5)+.1
+  )
+positions8<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.5,sin(seq(-7.5*pi,-1.5*pi, length.out = 100))*.08, .5)+.25
+  )
+positions9<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.5,sin(seq(-8*pi,-2*pi, length.out = 100))*.08, .5)+.4
+  )
+positions10<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.25,sin(seq(-8.5*pi,-2.5*pi, length.out = 100))*.08, .25)+.55
+  )
+positions11<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.25,sin(seq(-9*pi,-3*pi, length.out = 100))*.08, .25)+.7
+  )
+g<-g+
+  geom_polygon(data=positions1, 
+               aes(x=x, y=y), 
+               fill="#dfe2db")+
+  geom_polygon(data=positions2, 
+               aes(x=x, y=y), 
+               fill="#d3d5d2")+
+  geom_polygon(data=positions3, 
+               aes(x=x, y=y), 
+               fill="#c4c3c1")+
+  geom_polygon(data=positions4, 
+               aes(x=x, y=y), 
+               fill="#b7b2b8")+
+  geom_polygon(data=positions5, 
+               aes(x=x, y=y), 
+               fill="#a79da5")+
+  geom_polygon(data=positions6, 
+               aes(x=x, y=y), 
+               fill="#91ad9f")+
+  geom_polygon(data=positions7, 
+               aes(x=x, y=y), 
+               fill="#a1b6af")+
+  geom_polygon(data=positions8, 
+               aes(x=x, y=y), 
+               fill="#b1c6bf")+
+  geom_polygon(data=positions9, 
+               aes(x=x, y=y), 
+               fill="#c6d6cc")+
+  geom_polygon(data=positions10, 
+               aes(x=x, y=y), 
+               fill="#dae1d9")+
+    geom_polygon(data=positions11, 
+               aes(x=x, y=y), 
+               fill="#e8ebe4")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y+6/19),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y-6/19),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y-12/19),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y+12/19),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y-18/19),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y+18/19),
+               fill="#ff9e3e")+
+  coord_fixed()+
+  scale_x_continuous(limits = c(-1,1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-1,1), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+g
+```
+
+
+
+Colors from left to right: 
+#e8eadf
+#dfe2db
+#d3d5d2
+#c4c3c1
+#b7b2b8
+#a79da5
+#91ad9f
+#a1b6af
+#b1c6bf
+#c6d6cc
+#dae1d9
+#e8ebe4
+
+Orange:
+#ff9e3e
