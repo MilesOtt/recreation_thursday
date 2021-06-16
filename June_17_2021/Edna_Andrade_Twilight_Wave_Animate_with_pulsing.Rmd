@@ -32,16 +32,16 @@ colors<-c(
 
 
 
-steps<-seq(0,2, by=1/32)
+steps<-seq(0,4, by=1/32)
 
 twilight.wave<-function(){
   for(i in steps){
 
 #making a circle dataframe
 circle.pos<-data.frame(
-  x<-sin(seq(0, 2*pi, length=100))*1/16 *abs(i-1),
+  x<-sin(seq(0, 2*pi, length=100))*1/16 *abs(i-2)/2,
   
-  y<-cos(seq(0, 2*pi, length=100))*1/16 *abs(i-1)
+  y<-cos(seq(0, 2*pi, length=100))*1/16 *abs(i-2)/2
 )  
   
   positions1<-data.frame(
