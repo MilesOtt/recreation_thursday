@@ -1,0 +1,167 @@
+---
+title: "Edna Andrade's Twilight Wave (1973)"
+author: "Miles Ott"
+date: "6/15/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+```
+
+
+```{r}
+ xthing<-1
+colors<-c(
+          "#dfe2db",
+          "#d3d5d2",
+          "#c4c3c1",
+          "#b7b2b8",
+          "#a79da5",
+          "#91ad9f",
+          "#a1b6af",
+          "#b1c6bf",
+          "#c6d6cc",
+          "#dae1d9",
+          "#e8ebe4"
+          )
+
+g<-ggplot()+ theme(panel.background = element_rect(fill='#e8eadf', colour='white'),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())
+
+
+circle.pos<-data.frame(
+  x<-sin(seq(0, 2*pi, length=100))*1/16,
+  y<-cos(seq(0, 2*pi, length=100))*1/16
+)
+
+
+positions1<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-4*pi,2*pi, length.out = 100))*.08, 1)-.8
+  )
+positions2<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-4.5*pi,1.5*pi, length.out = 100))*.08, 1)-.65
+  )
+positions3<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-5*pi,1*pi, length.out = 100))*.08, 1)-.50
+  )
+positions4<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-5.5*pi,.5*pi, length.out = 100))*.08, 1)-.35
+  )
+positions5<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-6*pi,0*pi, length.out = 100))*.08, 1)-.2
+  )
+positions6<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(1,sin(seq(-6.5*pi,-.5*pi, length.out = 100))*.08, 1)-.05
+  )
+positions7<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.5,sin(seq(-7*pi,-1*pi, length.out = 100))*.08, .5)+.1
+  )
+positions8<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.5,sin(seq(-7.5*pi,-1.5*pi, length.out = 100))*.08, .5)+.25
+  )
+positions9<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.5,sin(seq(-8*pi,-2*pi, length.out = 100))*.08, .5)+.4
+  )
+positions10<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.25,sin(seq(-8.5*pi,-2.5*pi, length.out = 100))*.08, .25)+.55
+  )
+positions11<-data.frame(
+  y=c(-1,seq(-1,1, length.out=100),1),
+  x=c(.3,sin(seq(-9*pi,-3*pi, length.out = 100))*.08, .3)+.7
+  )
+g<-g+
+  #wave1
+  geom_polygon(data=positions1, 
+               aes(x=x, y=y), 
+               fill=colors[1])+
+  #wave2
+  geom_polygon(data=positions2, 
+               aes(x=x, y=y), 
+               fill=colors[2])+
+  geom_polygon(data=positions3, 
+               aes(x=x, y=y), 
+               fill=colors[3])+
+  geom_polygon(data=positions4, 
+               aes(x=x, y=y), 
+               fill=colors[4])+
+  geom_polygon(data=positions5, 
+               aes(x=x, y=y), 
+               fill=colors[5])+
+  geom_polygon(data=positions6, 
+               aes(x=x, y=y), 
+               fill=colors[6])+
+  geom_polygon(data=positions7, 
+               aes(x=x, y=y), 
+               fill=colors[7])+
+  geom_polygon(data=positions8, 
+               aes(x=x, y=y), 
+               fill=colors[8])+
+  geom_polygon(data=positions9, 
+               aes(x=x, y=y), 
+               fill=colors[9])+
+  geom_polygon(data=positions10, 
+               aes(x=x, y=y), 
+               fill=colors[10])+
+    geom_polygon(data=positions11, 
+               aes(x=x, y=y), 
+               fill=colors[11])+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y+5/16),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y-5/16),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y-10/16),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y+10/16),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y-15/16),
+               fill="#ff9e3e")+
+  geom_polygon(data=circle.pos,
+               aes(x=x, y=y+15/16),
+               fill="#ff9e3e")+
+   
+  #trying to round the bottom
+ 
+  geom_polygon(
+    aes(x=.25*c(xthing, seq(xthing,0, by=-.01),0,xthing)-.3,
+        y=c(xthing^6,(seq(xthing, 0, by=-.01))^6,0,0)-1),
+        fill=colors[5])+
+  
+  
+  #making everything scaled appropriately
+  coord_fixed()+
+  scale_x_continuous(limits = c(-1,1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-1,1), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+g
+```
+
+
