@@ -89,6 +89,12 @@ g<-g+
   geom_polygon(data=positions1, 
                aes(x=x, y=y), 
                fill=colors[1])+
+   #trying to round the bottom
+ 
+  geom_polygon(
+    aes(x=.25*c(xthing, seq(xthing,0, by=-.001),0,xthing)-.92,
+        y=c(xthing^8,(seq(xthing, 0, by=-.001))^8,0,0)-1),
+        fill=1)+
   #wave2
   geom_polygon(data=positions2, 
                aes(x=x, y=y), 
@@ -102,6 +108,12 @@ g<-g+
   geom_polygon(data=positions5, 
                aes(x=x, y=y), 
                fill=colors[5])+
+    #trying to round the bottom
+ 
+  geom_polygon(
+    aes(x=.25*c(xthing, seq(xthing,0, by=-.01),0,xthing)-.35,
+        y=c(xthing^6,(seq(xthing, 0, by=-.01))^6,0,0)-1),
+        fill=colors[5])+
   geom_polygon(data=positions6, 
                aes(x=x, y=y), 
                fill=colors[6])+
@@ -142,12 +154,7 @@ g<-g+
                aes(x=x, y=y+15/16),
                fill="#ff9e3e")+
    
-  #trying to round the bottom
- 
-  geom_polygon(
-    aes(x=.25*c(xthing, seq(xthing,0, by=-.01),0,xthing)-.3,
-        y=c(xthing^6,(seq(xthing, 0, by=-.01))^6,0,0)-1),
-        fill=colors[5])+
+
   
   
   #making everything scaled appropriately
