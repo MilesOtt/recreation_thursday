@@ -1,0 +1,46 @@
+---
+title: Alfredo Hlitos Curves and Straight Series (1948)
+author: "Miles Ott"
+date: "6/24/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+colors<-c(
+  "#e6e0d0", #1 background
+  "#c04631", #2 red
+  "#7aa03e", #3 green
+  "#2a4c7e", #4 blue
+  "#3d362f", #5 charcoal
+  "#b9b064"  #6 greenish yellowish big curve
+)
+
+g<-ggplot()+ theme(panel.background = element_rect(fill=colors[1], colour='white'),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())
+
+```
+
+
+make first curve?
+```{r}
+
+bound<-pi/3
+big.curve<-data.frame(
+  y<-sin(seq(bound, -bound, length=500)),
+  x<-cos(seq(bound, -bound, length=500))
+)
+
+g<-g+
+  #big curve
+  geom_line(data=big.curve, 
+               aes(x=x, y=y), 
+               colour=colors[6])
+g
+```
+
