@@ -1,0 +1,257 @@
+---
+title: Alfredo Hlitos Curves and Straight Series (1948)
+author: "Miles Ott"
+date: "6/24/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(gifski)
+
+n<-100
+
+colors<-c(
+  "#e6e0d0", #1 background
+  "#c04631", #2 red
+  "#7aa03e", #3 green
+  "#2a4c7e", #4 blue
+  "#3d362f", #5 charcoal
+  "#b9b064"  #6 greenish yellowish big curve
+)
+
+n.steps<-80 #30
+steps<-seq(1,n.steps)
+
+bound<-pi/4
+scale<-.8
+   
+first.big.curve.y<- rep(.98, length=n)
+last.big.curve.y<-sin(seq(bound*scale, -(bound+.4)*scale, length=n))+.405
+
+first.big.curve.x<- seq(-1,0, length=n)
+last.big.curve.x<-cos(seq(bound*scale, -(bound+.4)*scale, length=n))-.9
+
+last.diagonal.x=seq(-.05, .45, length=n)
+first.diagonal.x=seq(-.2, .45, length=n)
+
+last.diagonal.y=seq(.10, -.40, length=n)
+first.diagonal.y=seq(-.9, -.40, length=n)
+
+
+big.curve.y<-matrix(
+  rep(0, n*n.steps), 
+  ncol=n.steps)
+
+
+
+big.curve.x<-big.curve.y
+
+blue.curve.x<-big.curve.y
+blue.curve.y<-big.curve.y
+
+diagonal.x<-big.curve.y
+diagonal.y<-big.curve.y
+
+for(i in 1:n){
+  
+  big.curve.y[i,]<-seq(
+    first.big.curve.y[i],
+    last.big.curve.y[i],
+    length=n.steps)
+  
+  big.curve.x[i,]<-seq(
+    first.big.curve.x[i],
+    last.big.curve.x[i],
+    length=n.steps)
+  
+  diagonal.x[i,]<-seq(
+    first.diagonal.x[i],
+    last.diagonal.x[i],
+    length=n.steps)
+  
+    diagonal.y[i,]<-seq(
+    first.diagonal.y[i],
+    last.diagonal.y[i],
+    length=n.steps)
+}
+
+for(i in 1: n.steps){
+  blue.curve.y[,i]<- sin(seq(bound-2*bound*(1- i/n.steps), -bound , length=n))*.5-.39
+  blue.curve.x[,i]<- -cos(seq(bound-bound*2*(1-i/n.steps), -bound, length=n))*.5+.43 
+}
+
+```
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+hlito<-function(){
+  for(j in c(steps,n.steps:1 )){
+    
+    g<-ggplot()+ 
+      theme(
+        panel.background =
+          element_rect(fill=colors[1],
+                       colour='white'),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+
+
+    #making first curve
+
+    
+    big.curve<-data.frame(
+      y=big.curve.y[,j],
+      x=big.curve.x[,j]
+      )
+
+    #small blue curve
+    
+    small.curve<-data.frame(
+     y=blue.curve.y[,j],
+      x=blue.curve.x[,j]
+      )
+
+    #diagonal 
+    
+    diagonal<-data.frame(
+      y=diagonal.y[,j],
+      x=diagonal.x[,j]
+      )
+
+    # flat bars
+    
+    gl<-data.frame(
+      x=seq(-0.31695, -.5 ,length=n),
+      y=seq(.1, .1, length=n)
+      )
+    g<-g+
+  
+      #big curve
+      geom_path(data=big.curve, 
+                aes(x=x, y=y), 
+                colour=colors[6],
+                size=1.3+ 4*(1-j/n.steps),
+                lineend = "square"
+                )+
+  
+      #small curve
+      geom_path(data=small.curve, 
+                aes(x=x, y=y), 
+                colour=colors[4],
+                size=1.3+ 4*(1-j/n.steps),
+                lineend = "square"
+                )+
+  
+      #black diagonal line
+      geom_line(data=diagonal, 
+                aes(x=x, y=y), 
+                colour=colors[5],
+                size=1.3+ 4*(1-j/n.steps),
+                lineend = "square"
+                )+
+  
+      #green line on the left
+      geom_line(data=gl,
+                aes(x=x, y=y), 
+                colour=colors[3],
+                size=1.3,
+                lineend = "square"
+                )+
+
+      #red line on the upper left
+      geom_line(data=gl,
+                aes(x=x, y=(y-.15)),
+                colour=colors[2],
+                size=1.3,
+                lineend = "square"
+                )+ 
+  
+      #blue line on the left
+      geom_line(data=gl,
+                aes(x=x, y=(y-.2)),
+                colour=colors[4],
+                size=1.3,
+                lineend = "square"
+                )+ 
+      #black line on the left
+      geom_line(data=gl,
+                aes(x=x, y=(y-.25)),
+                colour=colors[5],
+                size=1.3,
+                lineend = "square"
+                )+ 
+  
+      #red line on the lower left
+      geom_line(data=gl,
+                aes(x=x, y=(y-.7)), 
+                colour=colors[2],
+                size=1.3,
+                lineend = "square"
+                )+ 
+  
+      #red line on the right
+      geom_line(data=gl,
+                aes(x=x+1, y=(y-.03)), 
+                colour=colors[2],
+                size=1.3,
+                lineend = "square"
+                )+ 
+  
+      #green line on the right
+      geom_line(data=gl,
+                aes(x=x+1, y=(y+.13)),
+                colour=colors[3],
+                size=1.3,
+                lineend = "square"
+                )+
+  
+      #blue line on the right
+      geom_line(data=gl,
+                aes(x=x+1, y=(y+.18)),
+                colour=colors[4],
+                size=1.3,
+                lineend = "square"
+                )+
+      
+  
+      #black line on the right
+      geom_line(data=gl,
+                aes(x=x+1, y=(y+.23)),
+                colour=colors[5],
+                size=1.3,
+                lineend = "square"
+                )+
+  
+      coord_fixed()+
+      scale_x_continuous(
+        limits = c(-1,1), 
+        expand = c(0, 0)
+        ) +
+  
+      scale_y_continuous(
+        limits = c(-1,1), 
+        expand = c(0, 0)
+        )+
+  
+      theme(
+        axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+    print(g)
+    }
+  }
+
+
+invisible(save_gif(hlito(), "hlito_animated.gif", delay = 0.1, progress = FALSE))  
+
+knitr::include_graphics("hlito_animated.gif")
+```
+
