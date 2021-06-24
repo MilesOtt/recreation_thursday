@@ -26,14 +26,20 @@ g<-ggplot()+ theme(panel.background = element_rect(fill=colors[1], colour='white
 
 #making first curve
 bound<-pi/4
+scale<-.8
 big.curve<-data.frame(
-  y<-sin(seq(-bound, bound, length=10000))+.27,
-  x<-cos(seq(bound, -bound, length=10000))-3/4
+  y=sin(seq(bound*scale, -(bound+.4)*scale, length=10000))+.405,
+  x=cos(seq(bound*scale, -(bound+.4)*scale, length=10000))-.9
+)
+
+small.curve<-data.frame(
+  y=sin(seq(bound, -bound, length=10000))*.5-.28,
+  x=-cos(seq(bound, -bound, length=10000))*.5+.53
 )
 
 diagonal<-data.frame(
-  x<-seq(-.05, .35, length=10000),
-  y<-seq(.35, -.05, length=10000)
+  x=seq(0, .4, length=10000),
+  y=seq(.25, -.15, length=10000)
 )
 
 
@@ -44,8 +50,14 @@ g<-g+
             colour=colors[6],
             size=1.3
             )+
+  #small curve
+  geom_path(data=small.curve, 
+            aes(x=x, y=y), 
+            colour=colors[4],
+            size=1.3
+            )+
   #black diagonal line
-  geom_path(data=diagonal, 
+  geom_line(data=diagonal, 
             aes(x=x, y=y), 
             colour=colors[5],
             size=1.3
