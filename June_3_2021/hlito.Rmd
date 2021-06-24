@@ -24,23 +24,43 @@ g<-ggplot()+ theme(panel.background = element_rect(fill=colors[1], colour='white
                    panel.grid.major = element_blank(),
                    panel.grid.minor = element_blank())
 
-```
-
-
-make first curve?
-```{r}
-
-bound<-pi/3
+#making first curve
+bound<-pi/4
 big.curve<-data.frame(
-  y<-sin(seq(bound, -bound, length=500)),
-  x<-cos(seq(bound, -bound, length=500))
+  y<-sin(seq(-bound, bound, length=10000))+.27,
+  x<-cos(seq(bound, -bound, length=10000))-3/4
 )
+
+diagonal<-data.frame(
+  x<-seq(-.05, .35, length=10000),
+  y<-seq(.35, -.05, length=10000)
+)
+
 
 g<-g+
   #big curve
-  geom_line(data=big.curve, 
-               aes(x=x, y=y), 
-               colour=colors[6])
+  geom_path(data=big.curve, 
+            aes(x=x, y=y), 
+            colour=colors[6],
+            size=1.3
+            )+
+  #black diagonal line
+  geom_path(data=diagonal, 
+            aes(x=x, y=y), 
+            colour=colors[5],
+            size=1.3
+            )+
+  
+  
+  coord_fixed()+
+  scale_x_continuous(limits = c(-1,1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-1,1), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 g
 ```
 
