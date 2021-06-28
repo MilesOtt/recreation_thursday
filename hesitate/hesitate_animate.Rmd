@@ -49,8 +49,11 @@ hesitate.wave<-function(){
       
             g<-g+geom_polygon(data=circle.pos,
                                      aes_string(x=x.coord, y=y.coord),
-                              fill=c(rainbow(30), rev(rainbow(30)), 
-                                     rainbow(30))[z+w])
+                              #fill=c(rainbow(30), rev(rainbow(30)), 
+                               #      rainbow(30))[z+w]
+                              fill=c(gray.colors(30), rev(gray.colors(30)), 
+                                     gray.colors(30))[z+w]
+                              )
     
             }
   
@@ -73,9 +76,9 @@ hesitate.wave<-function(){
   
 }
 
-invisible(save_gif(hesitate.wave(), "hesitate_animate.gif", delay = 0.1, progress = FALSE))
+invisible(save_gif(hesitate.wave(), "hesitate_animate_grey.gif", delay = 0.1, progress = FALSE))
 
-knitr::include_graphics("hesitate_animate.gif") 
+knitr::include_graphics("hesitate_animate_grey.gif") 
 
 ```
 
