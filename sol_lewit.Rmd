@@ -1,7 +1,7 @@
 ---
-title: Alfredo Hlitos Curves and Straight Series (1948)
+title: Sol Lewit
 author: "Miles Ott"
-date: "6/24/2021"
+date: "7/1/2021"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -18,8 +18,8 @@ colors<-c(
   "#92a7aa", #4 greyish blue
   "#963d8c", #5 purple
   "#40a46d", #6 green
-  "#e9eb41", #7 yellow
-  "#2a2627"  #8 black
+  "#e9eb41" #, #7 yellow
+  #"#2a2627"  #8 black
 )
 
 g<-ggplot()+ theme(panel.background = element_rect(fill=colors[3], colour='white'),
@@ -37,7 +37,18 @@ random.colors<-sample(x=colors[1:7], size=n, replace=TRUE)
 scale<-seq(1.01,.01, length=n)
 
 for(i in 1:n){ 
-g<-g+geom_polygon(data=circle.pos,
+  
+  #making sure that two colors don't repeat back to back
+  if(i>1){
+    if (random.colors[i]==random.colors[(i-1)]){
+      my.colors=colors[!random.colors[(i-1)]==colors]
+      random.colors[i]<-sample(my.colors, 1)
+ 
+    }
+  }
+  
+  #draw the circle
+  g<-g+geom_polygon(data=circle.pos,
                aes_string(x=x*scale[i], y=y*scale[i]),
                fill=random.colors[i])
 } 
