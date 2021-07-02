@@ -1,0 +1,64 @@
+---
+title: Alfredo Hlitos Curves and Straight Series (1948)
+author: "Miles Ott"
+date: "6/24/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+colors<-c(
+  "#5b94ca", #1 blue
+  "#d7201d", #2 red
+  "#cf8245", #3 orange
+  "#92a7aa", #4 greyish blue
+  "#963d8c", #5 purple
+  "#40a46d", #6 green
+  "#e9eb41", #7 yellow
+  "#2a2627"  #8 black
+)
+
+g<-ggplot()+ theme(panel.background = element_rect(fill=colors[3], colour='white'),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())
+# making the circles
+
+circle.pos<-data.frame(
+  x=sin(seq(0, 2*pi, length=300)),
+  y=cos(seq(0, 2*pi, length=300))
+)
+
+n<-100
+random.colors<-sample(x=colors[1:7], size=n, replace=TRUE)
+scale<-seq(1.01,.01, length=n)
+
+for(i in 1:n){ 
+g<-g+geom_polygon(data=circle.pos,
+               aes_string(x=x*scale[i], y=y*scale[i]),
+               fill=random.colors[i])
+} 
+
+
+#finishing out the image 
+g<-g+  coord_fixed()+
+  scale_x_continuous(limits = c(-1,1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-1,1), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+
+png(filename="sol_lewit.png", width=550, height=550)
+g
+dev.off()
+
+```
+
+
