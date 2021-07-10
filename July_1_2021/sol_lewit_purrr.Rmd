@@ -41,13 +41,71 @@ my.circles<-data.frame(
                 y=cos(seq(0, 2*pi, length=300))*..1),
               fill=..2))
 
-#add in the circles
-  g<-g+my.circles
+
+
+my.triangles1<-data.frame(
+  scale<-seq(0.99, .01, length=n),
+  random.colors<-sample(x=colors[1:7], size=n, replace=TRUE)
+  )%>%
+  purrr::pmap(.,
+             ~geom_polygon(
+               aes(
+                 x=(c(-1, 1, 0, -1)*..1)+2,
+                 y=c(1, 1, -1, 1)*..1),
+               fill=..2))
+
+my.triangles2<-data.frame(
+  scale<-seq(0.99, .01, length=n),
+  random.colors<-sample(x=colors[1:7], size=n, replace=TRUE)
+  )%>%
+  purrr::pmap(.,
+             ~geom_polygon(
+               aes(
+                 x=(c(-1, 1, 0, -1)*..1)+1,
+                 y=c(-1, -1, 1, -1)*..1),
+               fill=..2))
+    
+
+my.triangles3<-data.frame(
+  scale<-seq(0.99, .01, length=n),
+  random.colors<-sample(x=colors[1:7], size=n, replace=TRUE)
+  )%>%
+  purrr::pmap(.,
+             ~geom_polygon(
+               aes(
+                 x=(c(0, 0, -1, 0)*..1)+3,
+                 y=c(1, -1, -1, 1)*..1),
+               fill=..2))
+    
+my.triangles4<-data.frame(
+  scale<-seq(0.99, .01, length=n),
+  random.colors<-sample(x=colors[1:7], size=n, replace=TRUE)
+  )%>%
+  purrr::pmap(.,
+             ~geom_polygon(
+               aes(
+                 x=(c(-1, 1, 0, -1)*..1),
+                 y=c(1, 1, -1, 1)*..1),
+               fill=..2))
+
+my.triangles5<-data.frame(
+  scale<-seq(0.99, .01, length=n),
+  random.colors<-sample(x=colors[1:7], size=n, replace=TRUE)
+  )%>%
+  purrr::pmap(.,
+             ~geom_polygon(
+               aes(
+                 x=(c(-1, -1, 0, -1)*..1),
+                 y=c(-1, 1, -1, -1)*..1),
+               fill=..2))
+
+#add in the shapes
+  g<-g+my.triangles5+my.triangles3+my.triangles2+my.triangles1+my.triangles4#+my.triangles5
 
 
 #finishing out the image 
 g<-g+  coord_fixed()+
-  scale_x_continuous(limits = c(-1,1), expand = c(0, 0)) +
+  scale_x_continuous(limits = c(-1,3), expand = c(0, 0)) +
   scale_y_continuous(limits = c(-1,1), expand = c(0, 0))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
@@ -57,9 +115,7 @@ g<-g+  coord_fixed()+
         axis.ticks.y=element_blank())
 
 
-png(filename="sol_lewit.png", width=550, height=550)
 g
-dev.off()
 
 ```
 
