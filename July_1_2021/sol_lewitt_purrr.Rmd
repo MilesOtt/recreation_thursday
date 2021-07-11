@@ -114,6 +114,9 @@ g<-g+  coord_fixed()+
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
 
+png("sol_lewitt.png", height=800, width=1600)
+g
+dev.off()
 
 g
 
