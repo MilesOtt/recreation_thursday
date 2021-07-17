@@ -10,6 +10,8 @@ editor_options:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(gifski)
+
 
 #------ setting up colors
 colors<-c(
@@ -20,55 +22,66 @@ colors<-c(
   "#8d9385" #5 grey
 )
 
-#------ making one pinwheel shape
 
-pinwheel<-function(xplus, yplus){
+steps<-c(seq(-.99,-.1, by=.1), seq(-.1, -.99, by=-.05))
+
+odo<-function(){
+  for(i in steps){
+
+#------ making one pinwheel shape function
+
+pinwheel<-function(xplus, yplus, seed){
+  set.seed(seed)
   rc<-sample(colors[1:4], 4, replace=FALSE)
-  flip<-sample(c(1,-1), 1)
+  flip<-sample(c(1,-1, 1,-1), 1)
   p1<-geom_polygon(
               aes(
-                x=c(0, 0, 1, .7, 0)*flip+xplus,
+                x=c(0, 0, 1, i, 0)*flip+xplus,
                 y=c(0, -1, -1, -.3,0)+yplus,
                ),
               fill=rc[1])
   p2<-geom_polygon(
               aes(
                 x=c(0, -1,-1,-.3, 0)*flip+xplus,
-                y=c(0, 0, -1, -.7,0)+yplus,
+                y=c(0, 0, -1, -i,0)+yplus,
                ),
               fill=rc[2])
   p3<-geom_polygon(
               aes(
-                x=c(0, 0,-1, -.7, 0)*flip+xplus,
+                x=c(0, 0,-1, -i, 0)*flip+xplus,
                 y=c(0, 1, 1, .3, 0)+yplus,
                ),
               fill=rc[3])
   p4<-geom_polygon(
               aes(
                 x=c(0, 1,1,.3, 0)*flip+xplus,
-                y=c(0, 0, 1, .7, 0)+yplus,
+                y=c(0, 0, 1, i, 0)+yplus,
                ),
               fill=rc[4])
   return(list(p1,p2,p3,p4))
 }
-
-#------ making 4x4 pinwheel grid
-shapes<-data.frame(
-  x.seq<-rep(seq(0,6, length=4), 4),
-  y.seq<-c(rep(0,4), rep(2,4), rep(4,4), rep(6,4))
-  )%>%
-  purrr::pmap(., 
-            ~pinwheel(xplus=..1, yplus=..2)
-            )
+set.seed(-i+15)
 
 
-#----- putting it all together
+
+#----- getting the background
 
 g<-ggplot()+ theme(panel.background = element_rect(fill=colors[5], colour='white'),
                    panel.grid.major = element_blank(),
                    panel.grid.minor = element_blank())
 
 
+#------ making 4x4 pinwheel grid
+shapes<-data.frame(
+  x.seq<-rep(seq(0,6, length=4), 4),
+  y.seq<-c(rep(0,4), rep(2,4), rep(4,4), rep(6,4)),
+  seed<-sample(1:16, 16, replace=TRUE)
+  )%>%
+  purrr::pmap(., 
+            ~pinwheel(xplus=..1, yplus=..2, seed=..3)
+            )
+
+#------ putting it together
 g<-g+shapes
 
 #------ finishing out the image 
@@ -81,12 +94,14 @@ g<-g+  coord_fixed()+
         axis.title.y=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
+print(g)
+}
+}
 
-png("ODO2.png", height=1200, width=1200)
-g
-dev.off()
+invisible(save_gif(odo(), "odo1.gif", delay = 0.1, progress = FALSE, width=500, height=500))  
 
-#g
+knitr::include_graphics("odo1.gif") 
+
 
 ```
 
