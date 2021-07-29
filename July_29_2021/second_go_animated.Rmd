@@ -1,0 +1,129 @@
+---
+title: "Anton Stankowski Quadratspirale schwarz, 1952"
+author: "Miles Ott"
+date: "7/29/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(gifski)
+
+n=30
+squarez<-function(){
+  for(i in c(1:21, 20:1))
+    {
+
+#------ making one square
+
+squares<-function(xplus, yplus, lengths){
+  p1<-geom_path(
+              aes(
+                x=c(xplus, xplus, xplus+lengths, xplus+lengths, xplus),
+                y=c(yplus, yplus-lengths, yplus-lengths, yplus,yplus)
+               ),
+              size= 4.4, #i*30,
+              color="#1a1b1d",
+              #color=sample(colors[1:4],1),
+              lineend="square",
+              linejoin="mitre")
+  #p2<-geom_polygon(
+   # aes(
+  #              x=c(xplus, xplus, xplus+lengths, xplus+lengths, xplus)-2*i,
+  #              y=c(yplus, yplus-lengths, yplus-lengths, yplus,yplus)+2*i
+  #             ),
+  #  fill="black"
+  #  #fill=sample(colors[1:4],1)
+  #)
+  return(list(p1))
+}
+
+#------making dataframe for lengths and upper left-hand corner of each square
+df<-data.frame(
+  lengths<-seq(1, .16, length=21),# 1-.16
+  x.seq<-c(0, #1
+           0, #2
+           lengths[2], #3
+           lengths[1], #4
+           lengths[1], #5
+           lengths[1]-lengths[6], #6
+           lengths[1]-lengths[6]-lengths[7], #7
+           0-lengths[8], #8
+           0-lengths[9], #9
+           0-lengths[10], #10
+           0-lengths[11], #11
+           0, #12
+           lengths[12], #13
+           sum(lengths[12:13]), #14
+           sum(lengths[12:14]), #15
+           sum(lengths[12:15]), #16
+           rep(sum(lengths[2:3]), 5)), #17-21
+  
+  y.seq<-c(0, #1
+           -lengths[1], #2
+           -lengths[1]-lengths[2]+lengths[3], #3
+           -lengths[1]-lengths[2]+lengths[3]+lengths[4], #4
+           -lengths[1]-lengths[2]+lengths[3]+lengths[4]+lengths[5], #5
+           +lengths[6], #6
+           +lengths[7], #7
+           0, #8
+           -lengths[8], #9 
+           -sum(lengths[8:9]), #10
+           -sum(lengths[8:10]), #11
+           -rep(sum(lengths[1:2]), 5), #12-16 
+           -sum(lengths[1:2])+lengths[17], #17
+           -sum(lengths[1:2])+sum(lengths[17:18]), #18
+           -sum(lengths[1:2])+sum(lengths[17:19]), #19
+           -sum(lengths[1:2])+sum(lengths[17:20]), #20
+           -sum(lengths[1:2])+sum(lengths[17:21])) #21
+  )
+
+names(df)<-c("lengths", "x.seq", "y.seq")
+
+df<-df[1:i,]
+
+#------ making the full design using the squares function and the dataframe of square upper left hand corner locations and side length
+
+shapes<-df%>%
+  purrr::pmap(., 
+            ~squares(xplus=..2, yplus=..3, lengths=..1)
+            )
+
+
+#----- putting it all together
+
+g<-ggplot()+ theme(panel.background = element_rect(fill="#e5e5e3", colour="#e5e5e3"),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())
+
+
+g<-g+shapes
+
+#------ finishing out the image 
+g<-g+  coord_fixed()+
+  scale_x_continuous(limits = c(-2,3), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-4,2), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+
+print(g)
+
+  }
+  
+}
+invisible(save_gif(squarez(), "squarez_spiral.gif", delay = 0.1, progress = FALSE, width=500, height=500))  
+
+knitr::include_graphics("squarez.gif") 
+
+
+```
+
+
