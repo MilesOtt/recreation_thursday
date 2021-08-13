@@ -76,7 +76,7 @@ hesitate.wave<-function(){
   
 }
 
-invisible(save_gif(hesitate.wave(), "hesitate_animate_grey.gif", delay = 0.1, progress = FALSE))
+invisible(save_gif(hesitate.wave(), "hesitate_animate_grey.gif", height=500, width=500, delay = 0.1, progress = FALSE))
 
 knitr::include_graphics("hesitate_animate_grey.gif") 
 
