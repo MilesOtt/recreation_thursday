@@ -1,0 +1,190 @@
+---
+title: "Grandmother's Clothes 1 Chung Shun-Wen (2008)"
+author: "Miles Ott"
+date: "8/25/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+
+colors<-c("#f5f1e8", #1 light color
+          "#834945", #2 brick red color
+          "#e0a394", #3 pinky color
+          "#ecc6bb", #4 lighter pinky color
+          "#a98673", #5 putty color for button
+          "#d9c5c4", #6 off white color in the white-ish areas
+          "#aa8682") #7 button hole color
+
+squiggles<-function(xplus, theta, ymin, ymax, nhumps){
+  n<-100
+  width<-.02
+  
+  x1<-sin(seq(0, 2*nhumps*pi, length=n))*1/100+xplus
+  x2<-sin(seq(pi*.05, (2*nhumps+.05)*pi, length=n))*1/140+xplus
+  y1<-seq(ymin,ymax, length=n)
+  y2<-seq(ymax,ymin, length=n)
+  
+  x<-c(x1, xplus+width, x2+width, xplus)
+  y<-c(y1, ymax, y2, ymin)
+
+# Rotation time! 
+  R<-matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta) ), nrow=2)
+  coords_xy<-rbind(x,y)
+  coords_xy<-t(coords_xy)%*%R
+  
+  p1<-geom_polygon( 
+               aes(x=coords_xy[,1], y=coords_xy[,2]), 
+               size=3.1,
+               color=colors[2],
+               fill = colors[6])
+    return(list(p1))
+}
+
+
+#------ making many squiggles
+
+many_squiggles<-data.frame(
+  x.seq<-seq(0.02, 0.97, length=17),
+  theta=0,
+  ymin=0,
+  ymax=1,
+  nhumps=17
+  )%>%
+  purrr::pmap(., 
+            ~squiggles(xplus=..1, theta=..2, ymin=..3, ymax=..4, nhumps=..5)
+            )
+
+
+#---- making the background for the sleeve
+x.sleeve<-c(seq(.7,1, length=100), rep(1, length=100), 1+.24*cos(seq(1.5*pi, pi, length=100)))
+y.sleeve<-c(rep(1, length=100), seq(1,.7, length=100), 1+.4*sin(seq(1.5*pi, pi, length=100)))
+
+sleeve_b<-geom_polygon( 
+               aes(x=x.sleeve, y=y.sleeve), 
+               color=colors[1],
+               fill = colors[1])
+
+
+#---- making the sleeve stripes
+sleeve_squiggles1<-data.frame(
+  x.seq<-seq(1.16, 1.26, length=3),
+  theta=-pi/2.5,
+  ymin=-.75,
+  ymax=-.43,
+  nhumps=6
+  )%>%
+  purrr::pmap(., 
+            ~squiggles(xplus=..1, theta=..2, ymin=..3, ymax=..4, nhumps=..5)
+            )
+sleeve_squiggles2<-data.frame(
+  x.seq<-seq(1.11, 1.11, length=1),
+  theta=-pi/2.5,
+  ymin=-.75,
+  ymax=-.44,
+  nhumps=6
+  )%>%
+  purrr::pmap(., 
+            ~squiggles(xplus=..1, theta=..2, ymin=..3, ymax=..4, nhumps=..5)
+            )
+sleeve_squiggles3<-data.frame(
+  x.seq<-seq(1.06, 1.06, length=1),
+  theta=-pi/2.5,
+  ymin=-.85,
+  ymax=-.470,
+  nhumps=7
+  )%>%
+  purrr::pmap(., 
+            ~squiggles(xplus=..1, theta=..2, ymin=..3, ymax=..4, nhumps=..5)
+            )
+sleeve_squiggles4<-data.frame(
+  x.seq<-seq(1.01, 1.01, length=1),
+  theta=-pi/2.5,
+  ymin=-.95,
+  ymax=-.50,
+  nhumps=8
+  )%>%
+  purrr::pmap(., 
+            ~squiggles(xplus=..1, theta=..2, ymin=..3, ymax=..4, nhumps=..5)
+            )
+sleeve_squiggles5<-data.frame(
+  x.seq<-seq(.96, .96, length=1),
+  theta=-pi/2.5,
+  ymin=-1.05,
+  ymax=-.55,
+  nhumps=9
+  )%>%
+  purrr::pmap(., 
+            ~squiggles(xplus=..1, theta=..2, ymin=..3, ymax=..4, nhumps=..5)
+            )
+sleeve_squiggles6<-data.frame(
+  x.seq<-seq(.91, .91, length=1),
+  theta=-pi/2.5,
+  ymin=-1.05,
+  ymax=-.60,
+  nhumps=9
+  )%>%
+  purrr::pmap(., 
+            ~squiggles(xplus=..1, theta=..2, ymin=..3, ymax=..4, nhumps=..5)
+            )
+
+#------- buttons
+x<-cos(seq(0, 2*pi, length=100))*.023+.3
+y<-sin(seq(0, 2*pi, length=100))*.023 +.5 
+
+buttons1<-geom_polygon(aes(x=x, y=y), 
+               color=colors[5],
+               fill = colors[5])
+
+buttons2<-  geom_polygon(aes(x=x, y=y+.2), 
+               color=colors[5],
+               fill = colors[5])
+
+buttons3<-  geom_polygon(aes(x=x, y=y+.4), 
+               color=colors[5],
+               fill = colors[5])
+
+buttons4<-  geom_polygon(aes(x=x, y=y-.2), 
+               color=colors[5],
+               fill = colors[5])
+#------- putting it all together
+g<-ggplot()+
+  theme_void() + 
+  theme(panel.background = element_rect(fill=colors[1], colour=colors[1]))+ 
+  many_squiggles+
+  sleeve_b+
+  sleeve_squiggles1+
+  sleeve_squiggles2+
+  sleeve_squiggles3+
+  sleeve_squiggles4+
+    sleeve_squiggles5+
+      sleeve_squiggles6+
+  buttons1+
+  buttons2+
+  buttons3+
+  buttons4+
+  geom_vline(aes(xintercept=.34), size=1.19,col=colors[1])+
+    geom_polygon( aes(x=c(-.1, 1.1, 1.1, -.1), y=c(1.1, 1.1, 1, 1)),
+               fill = "white",
+               color="white")+
+  geom_polygon( aes(x=c(-.1, 1.1, 1.1, -.1), y=c(-.1, -.1, 0, 0)),
+               fill = "white",
+               color="white")+
+  geom_polygon( aes(x=c(-.1, 0, 0, -.1), y=c(1.1, 1.1, -.1, -.1)),
+               fill = "white",
+               color="white")+
+  geom_polygon( aes(x=c(1, 1.1, 1.1, 1), y=c(1.1, 1.1, -.1, -.1)),
+               fill = "white",
+               color="white")
+  
+g<-g+ coord_fixed()+
+  scale_x_continuous(limits = c(-.1,1.1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-.1,1.1), expand = c(0, 0))
+
+#png("grandmothers_clothes_1.png", units='in', width=4, height=4, res = 800)
+g # Make plot
+#dev.off()
+```
+
