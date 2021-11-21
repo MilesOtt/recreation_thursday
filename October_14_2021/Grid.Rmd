@@ -27,7 +27,7 @@ colors<-c("#022d60", #darkest blue = 1
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 
 grid_animate<-function(){
-  for(n in 2*c(1:20, 19:1)){
+  for(n in 2*c(1,1,2, 2,2,3, 3:8, 7:1)){
 
 g<-ggplot()+ theme(panel.background = element_rect(fill=colors[3], colour=colors[3]),
                    panel.grid.major = element_blank(),
@@ -110,7 +110,7 @@ print(g)
   }
   }
 
-invisible(save_gif(grid_animate(), "grid.gif", delay = 0.5, progress = TRUE, width=400, height=400))  
+invisible(save_gif(grid_animate(), "grid.gif", delay = 0.2, progress = TRUE, width=400, height=400))  
 
 knitr::include_graphics("grid.gif") 
 ```
