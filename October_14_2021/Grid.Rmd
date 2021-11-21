@@ -1,0 +1,116 @@
+---
+title: "Will Creech Grid (2021)"
+author: "Miles Ott"
+date: "11/21/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(gifski)
+
+library(tidyverse)
+colors<-c("#022d60", #darkest blue = 1
+          "#025a9a", #lighter blue1 = 2
+          "#eafdfb", #lightest blue = 3
+          "#227bb7"
+          )
+
+
+
+```
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+grid_animate<-function(){
+  for(n in 2*c(1:20, 19:1)){
+
+g<-ggplot()+ theme(panel.background = element_rect(fill=colors[3], colour=colors[3]),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())
+
+#n=11
+h_bars1<-data.frame(
+  yint<-seq(0.03,.97, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_hline(
+              aes(
+                yintercept =..1),
+              col=colors[1], size=12*4/n))
+
+h_bars2<-data.frame(
+  yint<-seq(0.1,.9, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_hline(
+              aes(
+                yintercept =..1),
+              col=colors[2], size=13*4/n))
+
+h_bars3<-data.frame(
+  yint<-seq(0.13,.87, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_hline(
+              aes(
+                yintercept =..1),
+              col=colors[4], size=13*4/n))
+
+
+v_bars1<-data.frame(
+  xint<-seq(0.03,.97, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_vline(
+              aes(
+                xintercept =..1),
+              col=colors[1], size=12*4/n))
+
+v_bars2<-data.frame(
+  xint<-seq(0.1,.9, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_vline(
+              aes(
+                xintercept =..1),
+              col=colors[2], size=13*4/n))
+
+v_bars3<-data.frame(
+  xint<-seq(0.13,.87, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_vline(
+              aes(
+                xintercept =..1),
+              col=colors[4], size=13*4/n))
+
+  
+g<-g+
+  h_bars3+
+  v_bars3+
+  h_bars2+
+  v_bars2+
+  h_bars1+
+  v_bars1+
+  coord_fixed()+
+  scale_x_continuous(limits = c(0,1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+print(g)
+
+#png("grid.png", units='in', width=4, height=4, res = 800)
+#g # Make plot
+#dev.off()
+
+  }
+  }
+
+invisible(save_gif(grid_animate(), "grid.gif", delay = 0.5, progress = TRUE, width=400, height=400))  
+
+knitr::include_graphics("grid.gif") 
+```
