@@ -61,16 +61,17 @@ shapes<-data.frame(
   y.max.seq<-rep(seq(0,6, length = 31), 49),
   x.max.seq<-sort(rep(seq(0, 5, length =49), 31), decreasing =FALSE),
   x.min.seq<-x.max.seq-5/49,
-  y.min.seq<-y.max.seq -6/31
+  y.min.seq<-y.max.seq -6/31,
+  cols<- sample (1:15, 31*49, replace=TRUE, prob=c(.7, rep(.3/14, 14)))
   )%>%
   purrr::pmap(., 
             ~random_shape(
-              color_shape = sample(1:15,1),
+              color_shape = ..5,
               xmin        = ..3, 
               xmax        = ..2,
               ymin        = ..4,
               ymax        = ..1,
-              jitter      = .01)
+              jitter      = .04)
             )
 ```
 
@@ -92,7 +93,7 @@ coord_fixed()+
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
 
-png("iris_tulips_jonquils_crocuses_1.png", height=1200, width=1200)
+png("iris_tulips_jonquils_crocuses_2.png", height=1200, width=1200)
 g
 dev.off()
 
