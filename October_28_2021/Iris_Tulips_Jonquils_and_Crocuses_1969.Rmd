@@ -59,7 +59,11 @@ random_shape<-function(color_shape, xmin, xmax, ymin, ymax, jitter){
 ```{r}
 
 mycols<-matrix(rep(1, 31*49), ncol=49)
+
+
 for(i in 1:49){
+  k<-sample(0:3,1)
+  mycols[1:31, i:min(i+k, 49)]<-sample(1:15, 1, prob =c(.9, rep(.01, 14)))
   j<-sample(1:31,1, replace=TRUE, prob =seq(.05, .01, length=31)/sum(seq(.01, .05, length=31)) )
   mycols[1:j, i]<-sample(2:15,1)
 }
@@ -103,9 +107,9 @@ coord_fixed()+
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
 
-g
+#g
 
-tiff("iris_tulips_jonquils_crocuses_4.tiff", width =5, height =6, units='in', res=400)
+png("iris_tulips_jonquils_crocuses_8.png", width =5, height =6, units='in', res=400)
 g
 dev.off()
 
