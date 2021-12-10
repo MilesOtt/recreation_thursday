@@ -1,0 +1,194 @@
+---
+title: "Alma Thomas Iris, Tulips, Jonquils, and Crocuses, 1969"
+author: "Miles Ott"
+date: "11/21/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(gifski)
+
+library(tidyverse)
+colors<-c("#234573", #darkest blue  = 1
+          "#83352e", #dark red      = 2
+          "#c5cac1", #pale green    = 3
+          "#b58339", #dark orange   = 4
+          "#5d808c", #jade green    = 5
+          "#3c7c7c", #darker green  = 6
+          "#6ea577", #minty green   = 7
+          "#98c9ce", #sky blue      = 8
+          "#a7648a", #deep lilac    = 9
+          "#dfcc3e", #bright yellow = 10
+          "#c4a939", #goldenrod     = 11
+          "#6f364f", #burgandy      = 12
+          "#484a74", #deep purple   = 13
+          "#b79da1", #rosy pink     = 14
+          "#638fb6", #medium blue   = 15
+          "#FAF9F6"  #off white     = 16
+          )
+
+
+
+```
+
+
+
+```{r}
+random_shape<-function(color_shape, xmin, xmax, ymin, ymax, jitter){
+  n.gon<-sample(c(6, 8, 10, 12),1)
+  half<-n.gon/2
+  x<-c(rep(xmin, half), rep(xmax,half)) 
+  y<-c(seq(ymax, ymin, length=half), seq(ymin, ymax, length=half))
+  x<-x+c(runif(half, 0, jitter), runif(half, -jitter, 0))
+  y<-y+runif(n.gon, -jitter, jitter)
+  shape<-geom_polygon(
+              aes(
+                x=x,
+                y=y,
+               ),
+              fill=colors[color_shape])
+  return(list(shape))
+}
+
+```
+
+
+
+```{r}
+shapes<-data.frame(
+  y.max.seq<-rep(seq(0,6, length = 31), 49),
+  x.max.seq<-sort(rep(seq(0, 5, length =49), 31), decreasing =FALSE),
+  x.min.seq<-x.max.seq-5/49,
+  y.min.seq<-y.max.seq -6/31
+  )%>%
+  purrr::pmap(., 
+            ~random_shape(
+              color_shape = sample(1:15,1),
+              xmin        = ..3, 
+              xmax        = ..2,
+              ymin        = ..4,
+              ymax        = ..1,
+              jitter      = .01)
+            )
+```
+
+
+
+
+```{r}
+g<-ggplot()+ theme(panel.background = element_rect(fill=colors[16], colour=colors[16]),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())+
+  shapes+
+coord_fixed()+
+  scale_x_continuous(limits = c(-.1,5.1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-.1,6.1), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+png("iris_tulips_jonquils_crocuses_1.png", height=1200, width=1200)
+g
+dev.off()
+
+```
+
+
+
+
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+grid_animate<-function(){
+  for(n in 2*c(1,1,2, 2,2,3, 3:8, 7:1)){
+
+g<-ggplot()+ theme(panel.background = element_rect(fill=colors[3], colour=colors[3]),
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank())
+
+#n=11
+h_bars1<-data.frame(
+  yint<-seq(0.03,.97, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_hline(
+              aes(
+                yintercept =..1),
+              col=colors[1], size=12*4/n))
+
+h_bars2<-data.frame(
+  yint<-seq(0.1,.9, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_hline(
+              aes(
+                yintercept =..1),
+              col=colors[2], size=13*4/n))
+
+h_bars3<-data.frame(
+  yint<-seq(0.13,.87, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_hline(
+              aes(
+                yintercept =..1),
+              col=colors[4], size=13*4/n))
+
+
+v_bars1<-data.frame(
+  xint<-seq(0.03,.97, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_vline(
+              aes(
+                xintercept =..1),
+              col=colors[1], size=12*4/n))
+
+v_bars2<-data.frame(
+  xint<-seq(0.1,.9, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_vline(
+              aes(
+                xintercept =..1),
+              col=colors[2], size=13*4/n))
+
+v_bars3<-data.frame(
+  xint<-seq(0.13,.87, length=n)
+  ) %>% purrr::pmap(., 
+            ~geom_vline(
+              aes(
+                xintercept =..1),
+              col=colors[4], size=13*4/n))
+
+  
+g<-g+
+  h_bars3+
+  v_bars3+
+  h_bars2+
+  v_bars2+
+  h_bars1+
+  v_bars1+
+  coord_fixed()+
+  scale_x_continuous(limits = c(0,1), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(0,1), expand = c(0, 0))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+print(g)
+
+#png("grid.png", units='in', width=4, height=4, res = 800)
+#g # Make plot
+#dev.off()
+
+  }
+  }
+
+invisible(save_gif(grid_animate(), "grid.gif", delay = 0.2, progress = TRUE, width=400, height=400))  
+
+knitr::include_graphics("grid.gif") 
+```
