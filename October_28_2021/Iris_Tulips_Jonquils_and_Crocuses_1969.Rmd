@@ -26,7 +26,7 @@ colors<-c("#234573", #darkest blue  = 1
           "#484a74", #deep purple   = 13
           "#b79da1", #rosy pink     = 14
           "#638fb6", #medium blue   = 15
-          "#FAF9F6"  #off white     = 16
+          "#F4F0DB"  #off white     = 16
           )
 
 
@@ -41,7 +41,7 @@ random_shape<-function(color_shape, xmin, xmax, ymin, ymax, jitter){
   half<-n.gon/2
   x<-c(rep(xmin, half), rep(xmax,half)) 
   y<-c(seq(ymax, ymin, length=half), seq(ymin, ymax, length=half))
-  x<-x+c(runif(half, -jitter*2, jitter), runif(half, -jitter, jitter*2))
+  x<-x+c(runif(half, -jitter*1.3, jitter), runif(half, -jitter, jitter*1.2))
   y<-y+runif(n.gon, -jitter, jitter)
   shape<-geom_polygon(
               aes(
@@ -57,12 +57,22 @@ random_shape<-function(color_shape, xmin, xmax, ymin, ymax, jitter){
 
 
 ```{r}
+
+mycols<-matrix(rep(1, 31*49), ncol=49)
+for(i in 1:49){
+  j<-sample(1:31,1, replace=TRUE, prob =seq(.05, .01, length=31)/sum(seq(.01, .05, length=31)) )
+  mycols[1:j, i]<-sample(2:15,1)
+}
+mcols<-c(mycols)
+
+
+
 shapes<-data.frame(
   y.max.seq<-rep(seq(0,6, length = 31), 49),
   x.max.seq<-sort(rep(seq(0, 5, length =49), 31), decreasing =FALSE),
   x.min.seq<-x.max.seq-5/49,
   y.min.seq<-y.max.seq -6/31,
-  cols<- sample (1:15, 31*49, replace=TRUE, prob=c(.7, rep(.3/14, 14)))
+  cols<- mcols #sample (1:15, 31*49, replace=TRUE, prob=c(.7, rep(.3/14, 14)))
   )%>%
   purrr::pmap(., 
             ~random_shape(
@@ -84,8 +94,8 @@ g<-ggplot()+ theme(panel.background = element_rect(fill=colors[16], colour=color
                    panel.grid.minor = element_blank())+
   shapes+
 coord_fixed()+
-  scale_x_continuous(limits = c(-.1,5.1), expand = c(0, 0)) +
-  scale_y_continuous(limits = c(-.1,6.2), expand = c(0, 0))+
+  scale_x_continuous(limits = c(-.3,5.2), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-.4,6.2), expand = c(0, 0))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -93,7 +103,9 @@ coord_fixed()+
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
 
-png("iris_tulips_jonquils_crocuses_3.png", height=1200, width=1200)
+g
+
+tiff("iris_tulips_jonquils_crocuses_4.tiff", width =5, height =6, units='in', res=400)
 g
 dev.off()
 
