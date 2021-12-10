@@ -150,6 +150,10 @@ g<-g+
         axis.ticks.y=element_blank())
 
 g
+
+png("Twilight_wave_colors.png", width =5, height =5, units='in', res=400)
+g
+dev.off()
 ```
 
 
